@@ -5,7 +5,7 @@
 
 ## 📌 Project Overview
 
-CodeRed is an AI-driven solution designed to simplify complex medical reports into clear and actionable visualizations. By automating data processing and integrating Explainable AI, CodeRed enhances decision-making for healthcare professionals and improves patient outcomes.
+CodeRed is an AI-driven solution designed to simplify complex reports into clear and actionable visualizations. By automating data processing and integrating Explainable AI, CodeRed enhances decision-making for healthcare professionals and improves patient outcomes.
 
 ---
 
