@@ -1,4 +1,4 @@
-# CodeRed: AI-Powered Data Analysis Tool
+CR 02: AI-Powered Data Analysis Tool
 
 **Team Name:** L Coders  
 ---
