@@ -1,0 +1,195 @@
+
+        <html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f9;
+                    margin: 20px;
+                }
+                h1 {
+                    color: #333;
+                    text-align: center;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 20px 0;
+                }
+                th, td {
+                    padding: 12px;
+                    text-align: left;
+                    border-bottom: 1px solid #ddd;
+                }
+                th {
+                    background-color: #4CAF50;
+                    color: white;
+                }
+                .highlight {
+                    background-color: #f9f9f9;
+                }
+                .error {
+                    color: red;
+                }
+                .success {
+                    color: green;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>Sanity Check Report</h1>
+            
+            <h3>Missing Values</h3>
+            <table>
+                <tr><th>Column</th><th>Missing Values</th></tr>
+                <tr><td>Name</td><td>55500</td></tr><tr><td>Age</td><td>0</td></tr><tr><td>Gender</td><td>55500</td></tr><tr><td>Blood Type</td><td>55500</td></tr><tr><td>Medical Condition</td><td>55500</td></tr><tr><td>Date of Admission</td><td>55500</td></tr><tr><td>Doctor</td><td>55500</td></tr><tr><td>Hospital</td><td>55500</td></tr><tr><td>Insurance Provider</td><td>55500</td></tr><tr><td>Billing Amount</td><td>0</td></tr><tr><td>Room Number</td><td>0</td></tr><tr><td>Admission Type</td><td>55500</td></tr><tr><td>Discharge Date</td><td>55500</td></tr><tr><td>Medication</td><td>55500</td></tr><tr><td>Test Results</td><td>55500</td></tr>
+            </table>
+
+            <h3>Data Types</h3>
+            <table>
+                <tr><th>Column</th><th>Data Type</th></tr>
+                <tr><td>Name</td><td>float64</td></tr><tr><td>Age</td><td>int64</td></tr><tr><td>Gender</td><td>float64</td></tr><tr><td>Blood Type</td><td>float64</td></tr><tr><td>Medical Condition</td><td>float64</td></tr><tr><td>Date of Admission</td><td>float64</td></tr><tr><td>Doctor</td><td>float64</td></tr><tr><td>Hospital</td><td>float64</td></tr><tr><td>Insurance Provider</td><td>float64</td></tr><tr><td>Billing Amount</td><td>float64</td></tr><tr><td>Room Number</td><td>int64</td></tr><tr><td>Admission Type</td><td>float64</td></tr><tr><td>Discharge Date</td><td>float64</td></tr><tr><td>Medication</td><td>float64</td></tr><tr><td>Test Results</td><td>float64</td></tr>
+            </table>
+
+            <h3>Outliers</h3>
+            <table>
+                <tr><th>Column</th><th>Outliers</th></tr>
+                <tr><td>Name</td><td>0</td></tr><tr><td>Age</td><td>0</td></tr><tr><td>Gender</td><td>0</td></tr><tr><td>Blood Type</td><td>0</td></tr><tr><td>Medical Condition</td><td>0</td></tr><tr><td>Date of Admission</td><td>0</td></tr><tr><td>Doctor</td><td>0</td></tr><tr><td>Hospital</td><td>0</td></tr><tr><td>Insurance Provider</td><td>0</td></tr><tr><td>Billing Amount</td><td>0</td></tr><tr><td>Room Number</td><td>0</td></tr><tr><td>Admission Type</td><td>0</td></tr><tr><td>Discharge Date</td><td>0</td></tr><tr><td>Medication</td><td>0</td></tr><tr><td>Test Results</td><td>0</td></tr>
+            </table>
+
+            <h3>Duplicate Rows</h3>
+            <p>534 duplicate rows found in the dataset.</p>
+
+            <h3>Correlations</h3>
+            <table>
+                <tr><th>Feature Pair</th><th>Correlation</th></tr>
+                <tr><td>Name</td><td>{'Name': nan, 'Age': nan, 'Gender': nan, 'Blood Type': nan, 'Medical Condition': nan, 'Date of Admission': nan, 'Doctor': nan, 'Hospital': nan, 'Insurance Provider': nan, 'Billing Amount': nan, 'Room Number': nan, 'Admission Type': nan, 'Discharge Date': nan, 'Medication': nan, 'Test Results': nan}</td></tr><tr><td>Age</td><td>{'Name': nan, 'Age': 1.0, 'Gender': nan, 'Blood Type': nan, 'Medical Condition': nan, 'Date of Admission': nan, 'Doctor': nan, 'Hospital': nan, 'Insurance Provider': nan, 'Billing Amount': -0.0038319421186176848, 'Room Number': -0.0007202144472245329, 'Admission Type': nan, 'Discharge Date': nan, 'Medication': nan, 'Test Results': nan}</td></tr><tr><td>Gender</td><td>{'Name': nan, 'Age': nan, 'Gender': nan, 'Blood Type': nan, 'Medical Condition': nan, 'Date of Admission': nan, 'Doctor': nan, 'Hospital': nan, 'Insurance Provider': nan, 'Billing Amount': nan, 'Room Number': nan, 'Admission Type': nan, 'Discharge Date': nan, 'Medication': nan, 'Test Results': nan}</td></tr><tr><td>Blood Type</td><td>{'Name': nan, 'Age': nan, 'Gender': nan, 'Blood Type': nan, 'Medical Condition': nan, 'Date of Admission': nan, 'Doctor': nan, 'Hospital': nan, 'Insurance Provider': nan, 'Billing Amount': nan, 'Room Number': nan, 'Admission Type': nan, 'Discharge Date': nan, 'Medication': nan, 'Test Results': nan}</td></tr><tr><td>Medical Condition</td><td>{'Name': nan, 'Age': nan, 'Gender': nan, 'Blood Type': nan, 'Medical Condition': nan, 'Date of Admission': nan, 'Doctor': nan, 'Hospital': nan, 'Insurance Provider': nan, 'Billing Amount': nan, 'Room Number': nan, 'Admission Type': nan, 'Discharge Date': nan, 'Medication': nan, 'Test Results': nan}</td></tr><tr><td>Date of Admission</td><td>{'Name': nan, 'Age': nan, 'Gender': nan, 'Blood Type': nan, 'Medical Condition': nan, 'Date of Admission': nan, 'Doctor': nan, 'Hospital': nan, 'Insurance Provider': nan, 'Billing Amount': nan, 'Room Number': nan, 'Admission Type': nan, 'Discharge Date': nan, 'Medication': nan, 'Test Results': nan}</td></tr><tr><td>Doctor</td><td>{'Name': nan, 'Age': nan, 'Gender': nan, 'Blood Type': nan, 'Medical Condition': nan, 'Date of Admission': nan, 'Doctor': nan, 'Hospital': nan, 'Insurance Provider': nan, 'Billing Amount': nan, 'Room Number': nan, 'Admission Type': nan, 'Discharge Date': nan, 'Medication': nan, 'Test Results': nan}</td></tr><tr><td>Hospital</td><td>{'Name': nan, 'Age': nan, 'Gender': nan, 'Blood Type': nan, 'Medical Condition': nan, 'Date of Admission': nan, 'Doctor': nan, 'Hospital': nan, 'Insurance Provider': nan, 'Billing Amount': nan, 'Room Number': nan, 'Admission Type': nan, 'Discharge Date': nan, 'Medication': nan, 'Test Results': nan}</td></tr><tr><td>Insurance Provider</td><td>{'Name': nan, 'Age': nan, 'Gender': nan, 'Blood Type': nan, 'Medical Condition': nan, 'Date of Admission': nan, 'Doctor': nan, 'Hospital': nan, 'Insurance Provider': nan, 'Billing Amount': nan, 'Room Number': nan, 'Admission Type': nan, 'Discharge Date': nan, 'Medication': nan, 'Test Results': nan}</td></tr><tr><td>Billing Amount</td><td>{'Name': nan, 'Age': -0.0038319421186176848, 'Gender': nan, 'Blood Type': nan, 'Medical Condition': nan, 'Date of Admission': nan, 'Doctor': nan, 'Hospital': nan, 'Insurance Provider': nan, 'Billing Amount': 1.0, 'Room Number': -0.0029427395027475283, 'Admission Type': nan, 'Discharge Date': nan, 'Medication': nan, 'Test Results': nan}</td></tr><tr><td>Room Number</td><td>{'Name': nan, 'Age': -0.0007202144472245329, 'Gender': nan, 'Blood Type': nan, 'Medical Condition': nan, 'Date of Admission': nan, 'Doctor': nan, 'Hospital': nan, 'Insurance Provider': nan, 'Billing Amount': -0.0029427395027475283, 'Room Number': 1.0, 'Admission Type': nan, 'Discharge Date': nan, 'Medication': nan, 'Test Results': nan}</td></tr><tr><td>Admission Type</td><td>{'Name': nan, 'Age': nan, 'Gender': nan, 'Blood Type': nan, 'Medical Condition': nan, 'Date of Admission': nan, 'Doctor': nan, 'Hospital': nan, 'Insurance Provider': nan, 'Billing Amount': nan, 'Room Number': nan, 'Admission Type': nan, 'Discharge Date': nan, 'Medication': nan, 'Test Results': nan}</td></tr><tr><td>Discharge Date</td><td>{'Name': nan, 'Age': nan, 'Gender': nan, 'Blood Type': nan, 'Medical Condition': nan, 'Date of Admission': nan, 'Doctor': nan, 'Hospital': nan, 'Insurance Provider': nan, 'Billing Amount': nan, 'Room Number': nan, 'Admission Type': nan, 'Discharge Date': nan, 'Medication': nan, 'Test Results': nan}</td></tr><tr><td>Medication</td><td>{'Name': nan, 'Age': nan, 'Gender': nan, 'Blood Type': nan, 'Medical Condition': nan, 'Date of Admission': nan, 'Doctor': nan, 'Hospital': nan, 'Insurance Provider': nan, 'Billing Amount': nan, 'Room Number': nan, 'Admission Type': nan, 'Discharge Date': nan, 'Medication': nan, 'Test Results': nan}</td></tr><tr><td>Test Results</td><td>{'Name': nan, 'Age': nan, 'Gender': nan, 'Blood Type': nan, 'Medical Condition': nan, 'Date of Admission': nan, 'Doctor': nan, 'Hospital': nan, 'Insurance Provider': nan, 'Billing Amount': nan, 'Room Number': nan, 'Admission Type': nan, 'Discharge Date': nan, 'Medication': nan, 'Test Results': nan}</td></tr>
+            </table>
+
+            <h3>Data Summary</h3>
+            <table>
+                <tr><th>count</th><td>Name                      0.0
+Age                   55500.0
+Gender                    0.0
+Blood Type                0.0
+Medical Condition         0.0
+Date of Admission         0.0
+Doctor                    0.0
+Hospital                  0.0
+Insurance Provider        0.0
+Billing Amount        55500.0
+Room Number           55500.0
+Admission Type            0.0
+Discharge Date            0.0
+Medication                0.0
+Test Results              0.0
+Name: count, dtype: float64</td></tr><tr><th>mean</th><td>Name                           NaN
+Age                      51.539459
+Gender                         NaN
+Blood Type                     NaN
+Medical Condition              NaN
+Date of Admission              NaN
+Doctor                         NaN
+Hospital                       NaN
+Insurance Provider             NaN
+Billing Amount        25539.316097
+Room Number             301.134829
+Admission Type                 NaN
+Discharge Date                 NaN
+Medication                     NaN
+Test Results                   NaN
+Name: mean, dtype: float64</td></tr><tr><th>std</th><td>Name                           NaN
+Age                      19.602454
+Gender                         NaN
+Blood Type                     NaN
+Medical Condition              NaN
+Date of Admission              NaN
+Doctor                         NaN
+Hospital                       NaN
+Insurance Provider             NaN
+Billing Amount        14211.454431
+Room Number             115.243069
+Admission Type                 NaN
+Discharge Date                 NaN
+Medication                     NaN
+Test Results                   NaN
+Name: std, dtype: float64</td></tr><tr><th>min</th><td>Name                         NaN
+Age                     13.00000
+Gender                       NaN
+Blood Type                   NaN
+Medical Condition            NaN
+Date of Admission            NaN
+Doctor                       NaN
+Hospital                     NaN
+Insurance Provider           NaN
+Billing Amount       -2008.49214
+Room Number            101.00000
+Admission Type               NaN
+Discharge Date               NaN
+Medication                   NaN
+Test Results                 NaN
+Name: min, dtype: float64</td></tr><tr><th>25%</th><td>Name                           NaN
+Age                      35.000000
+Gender                         NaN
+Blood Type                     NaN
+Medical Condition              NaN
+Date of Admission              NaN
+Doctor                         NaN
+Hospital                       NaN
+Insurance Provider             NaN
+Billing Amount        13241.224652
+Room Number             202.000000
+Admission Type                 NaN
+Discharge Date                 NaN
+Medication                     NaN
+Test Results                   NaN
+Name: 25%, dtype: float64</td></tr><tr><th>50%</th><td>Name                           NaN
+Age                      52.000000
+Gender                         NaN
+Blood Type                     NaN
+Medical Condition              NaN
+Date of Admission              NaN
+Doctor                         NaN
+Hospital                       NaN
+Insurance Provider             NaN
+Billing Amount        25538.069376
+Room Number             302.000000
+Admission Type                 NaN
+Discharge Date                 NaN
+Medication                     NaN
+Test Results                   NaN
+Name: 50%, dtype: float64</td></tr><tr><th>75%</th><td>Name                           NaN
+Age                      68.000000
+Gender                         NaN
+Blood Type                     NaN
+Medical Condition              NaN
+Date of Admission              NaN
+Doctor                         NaN
+Hospital                       NaN
+Insurance Provider             NaN
+Billing Amount        37820.508436
+Room Number             401.000000
+Admission Type                 NaN
+Discharge Date                 NaN
+Medication                     NaN
+Test Results                   NaN
+Name: 75%, dtype: float64</td></tr><tr><th>max</th><td>Name                           NaN
+Age                      89.000000
+Gender                         NaN
+Blood Type                     NaN
+Medical Condition              NaN
+Date of Admission              NaN
+Doctor                         NaN
+Hospital                       NaN
+Insurance Provider             NaN
+Billing Amount        52764.276736
+Room Number             500.000000
+Admission Type                 NaN
+Discharge Date                 NaN
+Medication                     NaN
+Test Results                   NaN
+Name: max, dtype: float64</td></tr>
+            </table>
+        </body>
+        </html>
+        
