@@ -22,7 +22,10 @@
   Adaptive and customizable workflows powered by LangGraph for efficient data analysis.  
 
 - **Intuitive Visualizations**:  
-  Generates clear, easy-to-interpret charts, graphs, and summaries for faster decision-making.  
+  Generates clear, easy-to-interpret charts, graphs, and summaries for faster decision-making.
+
+- **XAI**:  
+  Ensures the transparency and interpretability of the model's decision-making, allowing users to trust and understand the generated insights.
 
 ---
 
