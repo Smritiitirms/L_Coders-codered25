@@ -1,36 +1,50 @@
-# CR 02: AI-Powered Data Analysis Tool
+Here's an updated version of your README file that incorporates more detailed explanations and aligns with a professional GitHub format:
+
+---
+
+# **SYNAPSE AI**: AI-Powered Data Analysis Tool  
 
 **Team Name:** L Coders  
 ---
 
-## 📌 Project Overview
+## **📌 Project Overview**  
 
-CodeRed is an AI-driven solution designed to simplify complex reports into clear and actionable visualizations. By automating data processing and integrating Explainable AI, CodeRed enhances decision-making for healthcare professionals and improves patient outcomes.
-
----
-
-## 🌟 Key Features
-
-- Multi-Agent Framework with Supervisor, Critic, and Specialized Agents.  
-- Explainable AI integration (SHAP, LIME) for transparency.  
-- Adaptive workflows powered by LangGraph.  
-- Intuitive visualizations for faster data comprehension.  
+**Synapse AI** is a cutting-edge, AI-driven platform that transforms complex datasets into simplified, actionable visualizations. By leveraging automation, Explainable AI (XAI), and advanced data processing workflows, Synapse AI empowers healthcare professionals to make data-backed decisions, improving patient outcomes and operational efficiency.  
 
 ---
 
-## 🛠 Technology Stack
+## **🌟 Key Features**  
 
-- **AI/ML Frameworks:** TensorFlow, PyTorch  
-- **Data Processing:** Pandas, NumPy  
-- **XAI Tools:** SHAP, LIME  
-- **Cloud:** AWS/GCP  
+- **Multi-Agent Framework**:  
+  Implements Supervisor, Critic, and Specialized Agents to handle diverse tasks seamlessly.    
 
----
+- **Dynamic Workflows**:  
+  Adaptive and customizable workflows powered by LangGraph for efficient data analysis.  
 
-## 🎯 Use Cases
-
-- Transforming complex medical data into easy-to-understand visuals.  
-- Empowering healthcare professionals with actionable insights.  
+- **Intuitive Visualizations**:  
+  Generates clear, easy-to-interpret charts, graphs, and summaries for faster decision-making.  
 
 ---
 
+## **🛠 Technology Stack**  
+
+- **AI/ML Frameworks**: TensorFlow, PyTorch , Scikit learn
+- **Data Processing**: Pandas, NumPy    
+- **Visualization Tools**: Plotly, Seaborn ,Streamlit, Matplotlib 
+
+---
+
+## **🎯 Use Cases**  
+
+- **Medical Data Analysis**:  
+  Transform complex healthcare datasets into actionable insights with easy-to-interpret visuals.  
+
+- **Decision Support Systems**:  
+  Assist healthcare professionals in making informed, data-driven decisions to improve patient care.  
+
+
+---
+
+
+
+ 
