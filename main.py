@@ -5,9 +5,13 @@ import plotly.express as px
 import sweetviz as sv
 from datetime import datetime
 import sqlite3
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
 from agents.sanity_check import SanityCheckAgent
 from agents.summary import SummaryAgent
 from agents.report import ReportAgent
+from transformers import pipeline
+import shap
 
 # Set up folders
 UPLOAD_FOLDER = "uploads"
@@ -43,7 +47,36 @@ st.set_page_config(
 
 # Sidebar for navigation
 st.sidebar.title("🔍 Medical Data Explorer")
-page = st.sidebar.radio("Navigation", ["Home", "Feature Analysis", "Diagnostics", "Report", "About"])
+page = st.sidebar.radio("Navigation", ["Home", "Feature Analysis", "Diagnostics", "Report","Assistant","About"])
+
+
+import requests
+
+def generate_text_description(file_path):
+    """
+    Send a dataset to the local GPT server for summary generation.
+    
+    Args:
+        file_path (str): Path to the dataset file to be analyzed.
+    
+    Returns:
+        str: Summary text returned by the local GPT server.
+    """
+    try:
+        # Define the server endpoint
+        url = "http://localhost:5000/generate_summary"  # Update this to match your local server endpoint
+        files = {"file": open(file_path, "rb")}
+
+        # Make the request to the server
+        response = requests.post(url, files=files)
+
+        # Check the response status
+        if response.status_code == 200:
+            return response.json().get("summary", "No summary available.")
+        else:
+            return f"Error: Server responded with status code {response.status_code}."
+    except Exception as e:
+        return f"Error: {str(e)}"
 
 # Global variable for loaded data
 uploaded_file = None
@@ -90,7 +123,7 @@ if page == "Home":
         accept_multiple_files=False,
     )
 
-    st.subheader("🗂️ File Upload History")
+    st.subheader("🗂 File Upload History")
     history = get_file_history()
     if history:
         for file_name, upload_date in history:
@@ -123,28 +156,64 @@ elif page == "Diagnostics":
         target_column = st.selectbox("Select Target Column (e.g., Diagnosis/Outcome):", data.columns)
         feature_columns = st.multiselect("Select Features for Prediction:", [col for col in data.columns if col != target_column])
 
+        # Recommendation model selection (moved from sidebar)
+        st.subheader("📌 Recommended Models")
+        recomended_models = ['Logistic Regression', 'Random Forest', 'XGBoost Classifier', 'Gradient Boosting Classifier']
+        pred_model = st.selectbox("Choose a Model for Prediction", recomended_models)
+
         if st.button("Run Predictive Analysis"):
             if len(feature_columns) > 0:
-                # Placeholder: Implement predictive model training/inference
-                st.info("Training ML Model...")
-                
-                # Example: Use Logistic Regression (or any other model)
+                # Train-Test Split
                 from sklearn.model_selection import train_test_split
                 from sklearn.linear_model import LogisticRegression
                 from sklearn.metrics import classification_report
-                
+                from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+                from xgboost import XGBClassifier
+
                 X = data[feature_columns]
                 y = data[target_column]
-                
+
                 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-                model = LogisticRegression()
+
+                # Load the selected model
+                def load_pred_model(model_name):
+                    if model_name == 'Logistic Regression':
+                        model = LogisticRegression()
+                    elif model_name == 'Random Forest': 
+                        model = RandomForestClassifier()
+                    elif model_name == 'XGBoost Classifier':
+                        model = XGBClassifier()
+                    elif model_name == 'Gradient Boosting Classifier':
+                        model = GradientBoostingClassifier()
+                    else:
+                        raise ValueError(f"Unknown model name: {model_name}")
+                    return model
+
+                # Initialize and train the selected model
+                model = load_pred_model(pred_model)
                 model.fit(X_train, y_train)
 
-                # Predict and Display Results
+                # Predictions and evaluation
                 predictions = model.predict(X_test)
                 report = classification_report(y_test, predictions, output_dict=True)
-                st.write("**Classification Report:**")
-                st.json(report)
+
+                # Visual presentation of the report in a readable format
+                st.markdown("### Classification Report:")
+                st.markdown(f"#### Model: {pred_model}")
+                
+                # Show results as text in a clean and readable format
+                for label, metrics in report.items():
+                    if label != 'accuracy':
+                        st.markdown(f"{label}")
+                        st.markdown(f"Precision: {metrics['precision']:.2f}")
+                        st.markdown(f"Recall: {metrics['recall']:.2f}")
+                        st.markdown(f"F1-Score: {metrics['f1-score']:.2f}")
+                        st.markdown(f"Support: {metrics['support']}")
+                        st.markdown("---")
+
+                st.markdown(f"*Accuracy*: {report['accuracy']:.2f}")
+                
+                # Optional: You can also display confusion matrix, precision-recall curves, etc.
             else:
                 st.warning("Please select features for prediction.")
     else:
@@ -180,7 +249,7 @@ elif page == "Feature Analysis":
             st.plotly_chart(fig)
 
         elif vis_type == "Correlation Matrix":
-            st.write("**Correlation Matrix for Numeric Features:**")
+            st.write("Correlation Matrix for Numeric Features:")
             corr_matrix = data.corr()
             fig = px.imshow(corr_matrix, text_auto=True, title="Correlation Matrix", color_continuous_scale="Viridis")
             st.plotly_chart(fig)
@@ -197,7 +266,7 @@ elif page == "Feature Analysis":
             st.plotly_chart(fig)
 
         # Sweetviz Advanced Report Generation
-        st.subheader("📄 Generate Advanced Report")
+        st.subheader("📄 Generate Sanity Check Report")
         if st.button("Generate Sweetviz Report"):
             with st.spinner("Generating report..."):
                 report = sv.analyze(data)
@@ -208,6 +277,7 @@ elif page == "Feature Analysis":
                 st.download_button("Download Sweetviz Report", file, file_name="sweetviz_report.html")
     else:
         st.warning("No data available! Please upload a dataset on the Home page.")
+
 elif page == "Report":
     st.title("📄 Automated Detailed Report")
 
@@ -215,66 +285,124 @@ elif page == "Report":
         data = st.session_state["data"]
 
         st.subheader("📊 Data Overview")
-        st.write(f"**Rows:** {data.shape[0]}")
-        st.write(f"**Columns:** {data.shape[1]}")
+        st.write(f"Rows: {data.shape[0]}")
+        st.write(f"Columns: {data.shape[1]}")
         st.dataframe(data.head())
 
-        # Generate Summary
-        st.subheader("🔍 AI-Generated Summary")
-        if st.button("Generate Summary"):
-            with st.spinner("Generating summary..."):
-                # Call local GPT/LMStudio for summary
-                from transformers import pipeline
+       
 
-                summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
-                summary = summarizer(
-                    f"The dataset has {data.shape[0]} rows and {data.shape[1]} columns. "
-                    f"Here's a brief description of its contents: {data.describe(include='all').to_string()}",
-                    max_length=200,
-                    min_length=50,
-                    do_sample=False,
-                )[0]["summary_text"]
+        st.subheader("🧠 Explainable AI Insights")
+        if st.button("Generate Explainability Report"):
+            with st.spinner("Generating explainability insights..."):
+        # Select the target column for model prediction
+                target_column = st.selectbox("Select Target Column:", data.columns)
+                feature_columns = [col for col in data.columns if col != target_column]
 
-                st.success("Summary Generated:")
-                st.write(summary)
+        # Prepare the feature set (X) and target set (y)
+            X = data[feature_columns].select_dtypes(include=["number"]).dropna()
+            y = data[target_column]
 
-        # Generate Detailed Report
-        st.subheader("📑 Generate Detailed Report")
-        if st.button("Generate Detailed Report"):
-            with st.spinner("Generating detailed report..."):
-                from docx import Document
+        # Split the data into training and test sets
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-                # Create a Word document for the report
-                doc = Document()
-                doc.add_heading("Automated Data Analysis Report", level=1)
+        # Train a RandomForest model
+            model = RandomForestClassifier()
+            model.fit(X_train, y_train)
 
-                # Add overview
-                doc.add_heading("1. Data Overview", level=2)
-                doc.add_paragraph(f"Number of Rows: {data.shape[0]}")
-                doc.add_paragraph(f"Number of Columns: {data.shape[1]}")
-                doc.add_paragraph("Sample Data:")
-                doc.add_paragraph(data.head().to_string())
+        # Use SHAP to explain the model predictions
+            explainer = shap.TreeExplainer(model)
+            shap_values = explainer.shap_values(X_test)
 
-                # Add statistical analysis
-                doc.add_heading("2. Statistical Analysis", level=2)
-                doc.add_paragraph(data.describe(include="all").to_string())
+        # Display SHAP values and feature importance
+            st.write("### Feature Importance (SHAP Summary Plot):")
+            shap.summary_plot(shap_values, X_test, plot_type="bar", show=False)
+            st.pyplot(bbox_inches='tight')
 
-                # Add insights (using GPT/local model)
-                doc.add_heading("3. AI-Generated Insights", level=2)
-                summary = summarizer(
-                    f"The dataset has the following key statistical insights: {data.describe(include='all').to_string()}",
-                    max_length=200,
-                    min_length=50,
-                    do_sample=False,
-                )[0]["summary_text"]
-                doc.add_paragraph(summary)
+            st.write("### Detailed SHAP Values for Test Set:")
+            st.write(shap_values)
 
-                # Save the report
-                report_path = os.path.join(REPORT_FOLDER, "detailed_report.docx")
-                doc.save(report_path)
+        # Optionally, display a heatmap for feature importance
+            shap_df = pd.DataFrame(shap_values[0], columns=X_test.columns)
+            plt.figure(figsize=(10, 8))
+            sns.heatmap(shap_df.corr(), annot=True, cmap="coolwarm", fmt=".2f", linewidths=1)
+            st.pyplot(bbox_inches='tight')
 
-                with open(report_path, "rb") as file:
-                    st.download_button("Download Detailed Report", file, file_name="detailed_report.docx")
+
     else:
         st.warning("No data available! Please upload a dataset on the Home page.")
 
+
+elif page == "Assistant":
+    st.title("\U0001F5E3 AI Assistant")
+    st.subheader("Interact with the AI assistant to analyze your uploaded data or explore the reference information about diabetes.")
+
+    # Load reference file on diabetes in women
+    reference_file_path = "diabetes_women_reference.txt"
+    if os.path.exists(reference_file_path):
+        with open(reference_file_path, "r") as ref_file:
+            reference_data = ref_file.read()
+    else:
+        st.error("Reference file on diabetes in women not found.")
+        reference_data = None
+
+    # Display uploaded data preview if available
+    if "data" in st.session_state and st.session_state["data"] is not None:
+        data = st.session_state["data"]
+        st.write("Uploaded File Preview:")
+        st.dataframe(data.head())
+
+    # User question input
+    user_input = st.text_area("Ask a question about your uploaded data or explore the diabetes reference:")
+
+    if st.button("Get Response"):
+        if user_input:
+            # Prepare prompt with dataset summary and user input
+            prompt = ""
+            if "data" in st.session_state and st.session_state["data"] is not None:
+                summary = data.describe(include="all").to_string()
+                first_rows = data.head(5).to_string(index=False)
+                prompt += (
+                    f"The dataset contains the following summary:\n" + summary + "\n\n"
+                    f"Here are the first 5 rows of the dataset:\n" + first_rows + "\n\n"
+                )
+
+            if reference_data:
+                prompt += "Reference information about diabetes in women:\n" + reference_data + "\n\n"
+
+            prompt += "User's question:\n" + user_input
+
+            # Generate assistant response (assuming generate_assistant_response is implemented)
+            try:
+                response = generate_assistant_response(prompt)
+                st.write("AI Assistant Response:")
+                st.write(response)
+            except Exception as e:
+                st.error("Error generating response: " + str(e))
+        else:
+            st.warning("Please enter a question to get a response.")
+    else:
+        st.info("Waiting for your input.")   
+elif page == "About":
+    st.title("About Synapse AI")
+    st.subheader("An AI-Powered Medical Data Analysis Tool")
+
+    st.write("""
+    *Synapse AI* is an innovative tool designed to provide deep insights and analysis for medical datasets. Built using cutting-edge technologies such as Python, Streamlit, and AI-driven algorithms, Synapse AI empowers healthcare professionals, researchers, and data analysts to uncover patterns, predict outcomes, and generate comprehensive reports with ease.
+
+    Our tool simplifies the process of analyzing medical data, making it accessible and user-friendly for users of all skill levels. Whether you're working with patient records, clinical trials, or diagnostic data, Synapse AI helps you make informed decisions through its powerful suite of features, including:
+    - *Sanity checks* for data integrity
+    - *Predictive analysis* using advanced machine learning models
+    - *Comprehensive visualizations* for data exploration
+    - *Automated report generation* for easy sharing and presentation
+
+    *Why Synapse AI?*
+    - *User-Friendly Interface:* Designed with healthcare professionals in mind, offering an intuitive and easy-to-navigate experience.
+    - *AI-Powered Insights:* Utilize advanced machine learning models for predictive analytics and diagnostic predictions.
+    - *Real-Time Reporting:* Automatically generate Sweetviz and Pandas Profiling reports to provide a thorough analysis of the data.
+    - *Interactive Visualizations:* Quickly visualize data trends with dynamic charts and plots.
+
+    Our goal is to assist in making healthcare data analysis more efficient, accurate, and accessible for everyone.
+
+    *Contact Us:*
+    - If you have any questions, suggestions, or would like to collaborate, feel free to reach out to us.
+    """)
