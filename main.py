@@ -82,7 +82,6 @@ def generate_text_description(file_path):
 uploaded_file = None
 data = None
 
-# Function to load the dataset
 def load_data(file):
     file_type = file.name.split(".")[-1].lower()
     filepath = os.path.join(UPLOAD_FOLDER, file.name)
